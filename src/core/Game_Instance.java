@@ -3,11 +3,12 @@ package core;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
 
 public class Game_Instance {
 
 	Game_Grid game_grid;
-	int current_color = 0; //Note(Marc): 0 -> Unknown, 1 -> White, 2 -> Black
+	int current_color = 0; //Note(Marc): 0 -> Unknown, 4 -> White, 2 -> Black
 	
 	Socket MyClient; //Todo(Marc) : Rename client_socket
 	BufferedInputStream input;  //Todo(Marc) : Rename socket_input
@@ -28,6 +29,18 @@ public class Game_Instance {
 		}
 	}
 	
+	private Game_Move CalculateNextMove(){
+		List<Game_Move> move_list= this.game_grid.GetAvailableMove(this.current_color);
+		int cpt = 0;
+		for(Game_Move i :move_list){
+			System.out.print("# "+cpt);
+			i.Print();
+			cpt++;
+		}
+		
+		Game_Move selected_move = move_list.get(0);
+		return selected_move;
+	}
 	private void OnCommandReceive(char cmd){
 		try {
 			switch(cmd){
@@ -37,14 +50,18 @@ public class Game_Instance {
 					  input.read(aBuffer,0,size);
 		               					
 		                System.out.println("Nouvelle partie! Vous jouer blanc, entrez votre premier coup : \n");
-		                current_color = 1;
+		                current_color = 4;
 		                game_grid.Build_Grid(aBuffer);
 		                game_grid.PrintCmd();
 		                
-		              
-		                String move = null;
-		                move = console.readLine();
-						output.write(move.getBytes(),0,move.length());
+		                Game_Move selected_move =this.CalculateNextMove();
+						
+						this.game_grid.Apply_Move(selected_move);
+						this.game_grid.PrintCmd();
+						
+				
+						String move_message = selected_move.ToMessage();
+						output.write(move_message.getBytes(),0,move_message.length());
 						output.flush();
 					break;} 
 				case '2':{	//Note(Marc): Starting game with black 
@@ -55,6 +72,9 @@ public class Game_Instance {
 
 					System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des blancs\n");
 					current_color = 2;
+					
+					
+					
 					game_grid.Build_Grid(aBuffer);
 	                game_grid.PrintCmd();
 	                
@@ -69,13 +89,18 @@ public class Game_Instance {
 					String[] moves_info = trim_s.split("-");
 					
 					Game_Move last_move = new Game_Move(moves_info);					
-					last_move.Print();
+						last_move.Print();
+					this.game_grid.Apply_Move(last_move);
+					this.game_grid.PrintCmd();
 					
-					
-					System.out.println("Entrez votre coup : ");
-					String move = null;
-					move = console.readLine();
-					output.write(move.getBytes(),0,move.length());
+					Game_Move selected_move =this.CalculateNextMove();
+									
+						this.game_grid.Apply_Move(selected_move);
+						this.game_grid.PrintCmd();
+						
+				
+					String move_message = selected_move.ToMessage();
+					output.write(move_message.getBytes(),0,move_message.length());
 					output.flush();
 					break;}
 				case '4':{	//Note(Marc): Invalid last move , serveur ask for a move
