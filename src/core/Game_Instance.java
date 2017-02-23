@@ -29,14 +29,21 @@ public class Game_Instance {
 		}
 	}
 	
-	private Game_Move CalculateNextMove(){
-		List<Game_Move> move_list= this.game_grid.GetAvailableMove(this.current_color);
+	private static void PrintMoveList(List<Game_Move> move_list){
 		int cpt = 0;
 		for(Game_Move i :move_list){
 			System.out.print("# "+cpt);
 			i.Print();
 			cpt++;
 		}
+	}
+	private Game_Move CalculateNextMove(){
+		List<Game_Move> move_list= game_grid.GetAvailableMove(this.current_color);
+		
+		
+		
+		
+		
 		
 		Game_Move selected_move = move_list.get(0);
 		return selected_move;

@@ -7,6 +7,7 @@ public class Game_Move {
 	int To;
 	private boolean form;
 	
+	
 	private String  ParseIntToString(int index){
 		String text = new String();
 		
