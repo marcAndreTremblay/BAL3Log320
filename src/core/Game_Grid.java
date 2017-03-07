@@ -113,7 +113,7 @@ public class Game_Grid {
 			System.out.print(board_data[i]);
 		}
 		System.out.print('\n');
-		for(int i = 0;i< 64 ;i++){
+	/*	for(int i = 0;i< 64 ;i++){
 			if(i%stride == 0 && i !=0){
 				System.out.print('\n');
 			}
@@ -126,6 +126,7 @@ public class Game_Grid {
 			}
 			System.out.print(white_atk_pos_index[i]);
 		}
+		*/
 		System.out.print('\n');
 	}
 	

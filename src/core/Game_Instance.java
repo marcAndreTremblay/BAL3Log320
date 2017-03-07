@@ -31,6 +31,7 @@ public class Game_Instance {
 	
 	private static void PrintMoveList(List<Game_Move> move_list){
 		int cpt = 0;
+		System.out.print("\n");
 		for(Game_Move i :move_list){
 			System.out.print("# "+cpt);
 			i.Print();
@@ -40,11 +41,9 @@ public class Game_Instance {
 	private Game_Move CalculateNextMove(){
 		List<Game_Move> move_list= game_grid.GetAvailableMove(this.current_color);
 		
-		
-		
-		
-		
-		
+		//Note : Apply each move to the grid 
+		//the do alpa beta
+
 		Game_Move selected_move = move_list.get(0);
 		return selected_move;
 	}
@@ -101,6 +100,7 @@ public class Game_Instance {
 					this.game_grid.PrintCmd();
 					
 					Game_Move selected_move =this.CalculateNextMove();
+					//Todo(Check best move); availalle
 									
 						this.game_grid.Apply_Move(selected_move);
 						this.game_grid.PrintCmd();
