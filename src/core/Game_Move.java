@@ -120,7 +120,7 @@ public class Game_Move {
 		
 		return row*8 + col;
 	}
-	public Game_Move(int from, int to){
+	public Game_Move(int from, int to , boolean atk){
 		this.From = from;
 		this.To= to;	
 		form = true;

@@ -39,21 +39,27 @@ public class Game_Grid {
 					//Check bottom move
 					if(bottom_s < 64){ //Check if is in play
 						if(this.board_data[bottom_s] == 0){
-							result.add(new Game_Move(i,bottom_s));
+							result.add(new Game_Move(i,bottom_s,false));
 						}
 					}
 					//Check bottom left move
 					if(bottom_l >= min){
-						if(this.board_data[bottom_l] == 0 || this.board_data[bottom_l] == 4){
-							result.add(new Game_Move(i,bottom_l));
+						if(this.board_data[bottom_l] == 0){
+							result.add(new Game_Move(i,bottom_l,false));
 							
+						}
+						if(this.board_data[bottom_l] == 4){
+							result.add(new Game_Move(i,bottom_l,true));
 						}
 					}
 					//Check bottom right move
 					if(bottom_r <= max && bottom_r < 64){
-						if(this.board_data[bottom_r] == 0 || this.board_data[bottom_r] == 4){
-							result.add(new Game_Move(i,bottom_r));
+						if(this.board_data[bottom_r] == 0){
+							result.add(new Game_Move(i,bottom_r,false));
 							
+						}
+						if(this.board_data[bottom_r] == 4){
+							result.add(new Game_Move(i,bottom_r,true));
 						}
 					}
 				}
@@ -69,21 +75,27 @@ public class Game_Grid {
 					//Check top straith move
 					if(top_s >= 0){ //Check if is in play
 						if(this.board_data[top_s] == 0){
-							result.add(new Game_Move(i,top_s));
+							result.add(new Game_Move(i,top_s,false));
 						}
 					}
 					//Check top left move
 					if(top_l >= min && top_l >= 0){
-						if(this.board_data[top_l] == 0 || this.board_data[top_l] == 2){
-							result.add(new Game_Move(i,top_l));
+						if(this.board_data[top_l] == 0){
+							result.add(new Game_Move(i,top_l,false));
 							
+						}
+						if(this.board_data[top_l] == 2){
+							result.add(new Game_Move(i,top_l,true));
 						}
 					}
 					//Check bottom right move
 					if(top_r <= max ){
-						if(this.board_data[top_r] == 0 || this.board_data[top_r] == 2){
-							result.add(new Game_Move(i,top_r));
+						if(this.board_data[top_r] == 0 ){
+							result.add(new Game_Move(i,top_r,false));
 							
+						}
+						if(this.board_data[top_r] == 2){
+							result.add(new Game_Move(i,top_r,true));
 						}
 					}
 				}
@@ -95,6 +107,7 @@ public class Game_Grid {
 		this.board_data[move.To]  =this.board_data[move.From];
 		this.board_data[move.From]  =0;
 	}
+
 	public void Build_Grid(byte[] aBuffer){
 		String s = new String(aBuffer).trim();
         String[] boardValues;
