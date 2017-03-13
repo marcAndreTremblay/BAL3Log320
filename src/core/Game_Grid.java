@@ -12,48 +12,59 @@ public class Game_Grid {
 	private int [] board_data;
 	private int stride = 8;
 	public Game_Grid(){
-
+		
 		board_data = new int[64];
 	}
-	
+	public Game_Grid(int [] data){
+		
+		board_data = data;
+	}
 	public int GenerateGridHeristiqueValue(int player_value){
 		int value = 0;
-		if(this.IsFinal()){
+		if(this.IsFinal(player_value)){
 			return 999999999;
 		}
+		
 		//Check le nombre de pion
-		value += CountPion(player_value)*50;	
-		if(player_value ==4){
+		//value += CountPion(player_value)*10;	
+		if(player_value == 4){
 			//Check la difference de pion
-			value += (CountPion(4) -  CountPion(2))*100;
+		//	value += (CountPion(4) -  CountPion(2))*200;
 			//Check middle control
-			value += CountMidControlValue(player_value);
-			
-			
-			
+		//	value += CountMidControlValue(player_value);
+	
 		}
 		if(player_value ==2){
 			//Check la difference de pion
-			value += (CountPion(2) -  CountPion(4))*200;
+			//value += (CountPion(2) -  CountPion(4))*200;
 			//Check middle control
-			value += CountMidControlValue(player_value);
+		//	value += CountMidControlValue(player_value);
 	
 		}	
 		return value;
 	}
 	private int CountMidControlValue(int player_value){
 		int mid_c_value= 0 ;
-		for(int i = 0;i<64;i++){
-			if(i % 3  == 0 || i % 4  == 0 || i % 5  == 0 ||i % 6  == 0 ){
-
-
+		for(int i = 5;i<64;i=i+stride){
 				if(board_data[i] == player_value){
 					mid_c_value += 20;
 				}
-				
+		}
+		for(int i = 4;i<64;i=i+stride){
+			if(board_data[i] == player_value){
+				mid_c_value += 40;
 			}
 		}
-		
+		for(int i = 3;i<64;i=i+stride){
+			if(board_data[i] == player_value){
+				mid_c_value += 40;
+			}
+		}
+		for(int i = 2;i<64;i=i+stride){
+			if(board_data[i] == player_value){
+				mid_c_value += 20;
+			}
+		}
 		return mid_c_value;
 	}
 	private int CountPion(int Player){
@@ -87,7 +98,7 @@ public class Game_Grid {
 						}
 					}
 					//Check bottom left move
-					if(bottom_l >= min){
+					if(bottom_l >= min && bottom_l < 64 ){
 						if(this.board_data[bottom_l] == 0 || this.board_data[bottom_l] == 4){
 							result.add(new Game_Move(player,i,bottom_l));
 			
@@ -124,7 +135,7 @@ public class Game_Grid {
 						}
 					}
 					//Check bottom right move
-					if(top_r <= max ){
+					if(top_r >= min && top_r >= 0){
 						if(this.board_data[top_r] == 0 || this.board_data[top_r] == 2){
 							result.add(new Game_Move(player,i,top_r));
 			
@@ -154,19 +165,22 @@ public class Game_Grid {
 			this.board_data[move.To] = 0;
 		}
 	}
-	public boolean IsFinal(){
+	public boolean IsFinal(int player){
 		boolean won_check = false;
-		for(int i  = 0; i<8;i++){
-			if(board_data[i] == 4){
-				won_check = true;
+		if(player == 2){
+			for(int i  = 63; i> 55;i--){
+				if(board_data[i] == 2){
+					won_check = true;
+				}
 			}
 		}
-		for(int i  = 63; i> 55;i--){
-			if(board_data[i] == 2){
-				won_check = true;
+		if(player == 4){
+			for(int i  = 0; i<8;i++){
+				if(board_data[i] == 4){
+					won_check = true;
+				}
 			}
 		}
-		
 		return won_check;
 	}
 	public void Build_Grid(byte[] aBuffer){
@@ -178,7 +192,7 @@ public class Game_Grid {
 			board_data[i] = Integer.parseInt(boardValues[i]);
 		}
 	}
-	public void Build_Grid(){
+	public void Build_New_Grid_Grid(){
 		for(int i = 0 ;i<64;i++){
 			if(i >= 0 && i < 16){
 				board_data[i] = 2;
@@ -213,13 +227,7 @@ public class Game_Grid {
 		*/
 		System.out.print('\n');
 		
-		try {
-			
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	public void PrintMoveValue(int depth, List<Game_Move> moves){
 		for(Game_Move move : moves){

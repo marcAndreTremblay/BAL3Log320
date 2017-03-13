@@ -44,28 +44,28 @@ public class Game_Instance {
 	
 	
 	private int MinMax(Game_Grid grid, int player , int dept ){
-		if(grid.IsFinal() == true 
-				|| dept == 3){
+		if(grid.IsFinal(player) == true 
+				|| dept == 2){
 			return grid.GenerateGridHeristiqueValue(player);
 		}
 		if(player == max_player){
 			int max_score = -100000000;
-			List<Game_Move> move_list= game_grid.GetAvailableMove(player);
+			List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
-				int score = MinMax(game_grid,min_player,dept + 1);
+				int score = MinMax(game_grid,min_player,dept);
 				if(score > max_score){ 
 					max_score = score;
 					}
 				game_grid.Undo_Move(current);
 				
 			}
-			int current_value = grid.GenerateGridHeristiqueValue(max_player);
+			int current_value = grid.GenerateGridHeristiqueValue(min_player);
 			return current_value + max_score;
 		}
 		if(player == min_player){
 			int min_score = 100000000;
-			List<Game_Move> move_list= game_grid.GetAvailableMove(player);
+			List<Game_Move> move_list= game_grid.GetAvailableMove(min_player);
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
 				
@@ -74,17 +74,14 @@ public class Game_Instance {
 					min_score = score;
 					}
 				game_grid.Undo_Move(current);
-				
-				
-				
 			}
-			int current_value = grid.GenerateGridHeristiqueValue(min_player);
+			int current_value = grid.GenerateGridHeristiqueValue(max_player);
 			return current_value - min_score;
 		}
 		
 		return 0;
 	}
-	private Game_Move CalculateNextMove(){
+	public Game_Move CalculateNextMove(){
 		Game_Move best_move = new Game_Move();
 		int Best_score = -1000000000;
 		List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
@@ -100,6 +97,7 @@ public class Game_Instance {
 			game_grid.Undo_Move(current);
 		}
 		timer.StopTimeAndPrint();
+		System.out.println("score : "+Best_score);
 		return best_move;
 	}
 	private void OnCommandReceive(char cmd){
@@ -194,3 +192,4 @@ public class Game_Instance {
 		}
 	}
 }
+	
