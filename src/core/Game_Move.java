@@ -124,11 +124,11 @@ public class Game_Move {
 		
 		return row*8 + col;
 	}
-	public Game_Move(int owner,int from, int to , boolean atk){
+	public Game_Move(int owner,int from, int to ){
 		this.From = from;
 		this.To= to;	
 		form = true;
-		is_atk = atk;
+
 		owner_player = owner;	
 	}
 	public Game_Move(String [] move_info){
@@ -141,7 +141,7 @@ public class Game_Move {
 	}
 	public void Print(){
 		if(form == true){
-			System.out.println("Coup de :|"+From+"| "+ "À : |"+To+"| "); 
+			System.out.print("Coup de :|"+From+"| "+ "À : |"+To+"| "); 
 			
 		}else{
 			System.out.println("Coup de : "+  S_From +"|"+From+"| "+ "À : "+ S_To+"|"+To+"| "); 

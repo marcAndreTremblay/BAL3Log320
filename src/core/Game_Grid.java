@@ -18,6 +18,9 @@ public class Game_Grid {
 	
 	public int GenerateGridHeristiqueValue(int player_value){
 		int value = 0;
+		if(this.IsFinal()){
+			return 999999999;
+		}
 		//Check le nombre de pion
 		value += CountPion(player_value)*50;	
 		if(player_value ==4){
@@ -26,10 +29,12 @@ public class Game_Grid {
 			//Check middle control
 			value += CountMidControlValue(player_value);
 			
+			
+			
 		}
 		if(player_value ==2){
 			//Check la difference de pion
-			value += (CountPion(2) -  CountPion(4))*100;
+			value += (CountPion(2) -  CountPion(4))*200;
 			//Check middle control
 			value += CountMidControlValue(player_value);
 	
@@ -40,9 +45,12 @@ public class Game_Grid {
 		int mid_c_value= 0 ;
 		for(int i = 0;i<64;i++){
 			if(i % 3  == 0 || i % 4  == 0 || i % 5  == 0 ||i % 6  == 0 ){
+
+
 				if(board_data[i] == player_value){
 					mid_c_value += 20;
 				}
+				
 			}
 		}
 		
@@ -75,27 +83,21 @@ public class Game_Grid {
 					//Check bottom move
 					if(bottom_s < 64){ //Check if is in play
 						if(this.board_data[bottom_s] == 0){
-							result.add(new Game_Move(player,i,bottom_s,false));
+							result.add(new Game_Move(player,i,bottom_s));
 						}
 					}
 					//Check bottom left move
 					if(bottom_l >= min){
-						if(this.board_data[bottom_l] == 0){
-							result.add(new Game_Move(player,i,bottom_l,false));
-							
-						}
-						if(this.board_data[bottom_l] == 4){
-							result.add(new Game_Move(player,i,bottom_l,true));
+						if(this.board_data[bottom_l] == 0 || this.board_data[bottom_l] == 4){
+							result.add(new Game_Move(player,i,bottom_l));
+			
 						}
 					}
 					//Check bottom right move
 					if(bottom_r <= max && bottom_r < 64){
-						if(this.board_data[bottom_r] == 0){
-							result.add(new Game_Move(player,i,bottom_r,false));
-							
-						}
-						if(this.board_data[bottom_r] == 4){
-							result.add(new Game_Move(player,i,bottom_r,true));
+						if(this.board_data[bottom_r] == 0 || this.board_data[bottom_r] == 4){
+							result.add(new Game_Move(player,i,bottom_r));
+					
 						}
 					}
 				}
@@ -111,27 +113,21 @@ public class Game_Grid {
 					//Check top straith move
 					if(top_s >= 0){ //Check if is in play
 						if(this.board_data[top_s] == 0){
-							result.add(new Game_Move(player,i,top_s,false));
+							result.add(new Game_Move(player,i,top_s));
 						}
 					}
 					//Check top left move
 					if(top_l >= min && top_l >= 0){
-						if(this.board_data[top_l] == 0){
-							result.add(new Game_Move(player,i,top_l,false));
-							
-						}
-						if(this.board_data[top_l] == 2){
-							result.add(new Game_Move(player,i,top_l,true));
+						if(this.board_data[top_l] == 0 || this.board_data[top_l] == 2){
+							result.add(new Game_Move(player,i,top_l));
+						
 						}
 					}
 					//Check bottom right move
 					if(top_r <= max ){
-						if(this.board_data[top_r] == 0 ){
-							result.add(new Game_Move(player,i,top_r,false));
-							
-						}
-						if(this.board_data[top_r] == 2){
-							result.add(new Game_Move(player,i,top_r,true));
+						if(this.board_data[top_r] == 0 || this.board_data[top_r] == 2){
+							result.add(new Game_Move(player,i,top_r));
+			
 						}
 					}
 				}
@@ -153,7 +149,10 @@ public class Game_Grid {
 				this.board_data[move.To] = 4;
 			}
 			
-		}		
+		}	
+		else{
+			this.board_data[move.To] = 0;
+		}
 	}
 	public boolean IsFinal(){
 		boolean won_check = false;
@@ -222,5 +221,9 @@ public class Game_Grid {
 			e.printStackTrace();
 		}
 	}
-	
+	public void PrintMoveValue(int depth, List<Game_Move> moves){
+		for(Game_Move move : moves){
+			
+		}
+	}
 }

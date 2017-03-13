@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.*;
 import java.util.List;
 
+import javax.management.timer.Timer;
+
 public class Game_Instance {
 
 	Game_Grid game_grid;
@@ -15,9 +17,10 @@ public class Game_Instance {
 	BufferedOutputStream output;//Todo(Marc) : Rename socket_output
 	BufferedReader console;
    
-	
+	FastTimer timer;
 	public Game_Instance(){
 		try {
+			timer = new FastTimer();
 			this.game_grid = new Game_Grid();
 			this.MyClient = new Socket("localhost", 8888);
 			this.input    = new BufferedInputStream(MyClient.getInputStream());
@@ -42,7 +45,7 @@ public class Game_Instance {
 	
 	private int MinMax(Game_Grid grid, int player , int dept ){
 		if(grid.IsFinal() == true 
-				|| dept == 2){
+				|| dept == 3){
 			return grid.GenerateGridHeristiqueValue(player);
 		}
 		if(player == max_player){
@@ -57,7 +60,7 @@ public class Game_Instance {
 				game_grid.Undo_Move(current);
 				
 			}
-			int current_value = grid.GenerateGridHeristiqueValue(player);
+			int current_value = grid.GenerateGridHeristiqueValue(max_player);
 			return current_value + max_score;
 		}
 		if(player == min_player){
@@ -75,7 +78,7 @@ public class Game_Instance {
 				
 				
 			}
-			int current_value = grid.GenerateGridHeristiqueValue(player);
+			int current_value = grid.GenerateGridHeristiqueValue(min_player);
 			return current_value - min_score;
 		}
 		
@@ -85,6 +88,8 @@ public class Game_Instance {
 		Game_Move best_move = new Game_Move();
 		int Best_score = -1000000000;
 		List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
+		System.out.println(move_list.size());
+		timer.StartTime();
 		for(Game_Move current : move_list){
 			game_grid.Apply_Move(current);
 			int score = MinMax(game_grid,min_player,0);
@@ -94,6 +99,7 @@ public class Game_Instance {
 			}
 			game_grid.Undo_Move(current);
 		}
+		timer.StopTimeAndPrint();
 		return best_move;
 	}
 	private void OnCommandReceive(char cmd){

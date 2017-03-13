@@ -1,5 +1,6 @@
 package core;
 
+import java.util.List;
 
 public class Main {
 
@@ -8,12 +9,9 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 			
 		
-		Game_Grid test_grid = new Game_Grid();
-		test_grid.Build_Grid();
+
 		
-		test_grid.PrintCmd();
 		
-		Thread.sleep(1000);
 		
 			Game_Instance game = new Game_Instance();	
 			game.Start_Session();
