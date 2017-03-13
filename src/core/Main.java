@@ -16,14 +16,14 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 			
 		int [] data_1 = { 
-				0,0,0,4,0,0,0,0, // 2 start	
-				0,0,0,0,0,0,0,0, 
+				0,2,0,0,0,0,2,0, // 2 start	
+				0,0,2,0,0,2,0,0, 
+				0,0,0,2,2,0,0,0,
 				0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,
-				0,0,0,0,0,0,0,0,
-				0,0,0,0,0,0,0,0,
-				0,0,0,2,0,0,0,0};// 4 start	
+				0,0,4,0,0,4,0,0,
+				0,0,4,0,0,4,0,0};// 4 start	
 		Game_Grid test_grid_1 = new Game_Grid(data_1);
 		
 		List<Game_Move> black_2_move = test_grid_1.GetAvailableMove(2);
@@ -45,8 +45,8 @@ public class Main {
 		
 		Thread.sleep(1000);
 		
-		//	Game_Instance game = new Game_Instance();	
-		//	game.Start_Session();
+			Game_Instance game = new Game_Instance();	
+			game.Start_Session();
 			
 			
 			

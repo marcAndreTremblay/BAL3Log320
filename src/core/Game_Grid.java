@@ -29,22 +29,32 @@ public class Game_Grid {
 		//value += CountPion(player_value)*10;	
 		if(player_value == 4){
 			//Check la difference de pion
-		//	value += (CountPion(4) -  CountPion(2))*200;
+			value += (CountPion(4) -  CountPion(2))*200;
 			//Check middle control
-		//	value += CountMidControlValue(player_value);
+			value += CountMidControlValue(player_value);
 	
 		}
 		if(player_value ==2){
 			//Check la difference de pion
-			//value += (CountPion(2) -  CountPion(4))*200;
+			value += (CountPion(2) -  CountPion(4))*200;
 			//Check middle control
-		//	value += CountMidControlValue(player_value);
+			value += CountMidControlValue(player_value);
 	
 		}	
 		return value;
 	}
 	private int CountMidControlValue(int player_value){
 		int mid_c_value= 0 ;
+		for(int i = 0;i<64;i=i+stride){
+			if(board_data[i] == player_value){
+				mid_c_value -= 20;
+			}
+	}
+		for(int i = 8;i<64;i=i+stride){
+			if(board_data[i] == player_value){
+				mid_c_value -= 20;
+			}
+	}
 		for(int i = 5;i<64;i=i+stride){
 				if(board_data[i] == player_value){
 					mid_c_value += 20;

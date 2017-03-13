@@ -45,7 +45,7 @@ public class Game_Instance {
 	
 	private int MinMax(Game_Grid grid, int player , int dept ){
 		if(grid.IsFinal(player) == true 
-				|| dept == 2){
+				|| dept == 1){
 			return grid.GenerateGridHeristiqueValue(player);
 		}
 		if(player == max_player){
@@ -60,8 +60,8 @@ public class Game_Instance {
 				game_grid.Undo_Move(current);
 				
 			}
-			int current_value = grid.GenerateGridHeristiqueValue(min_player);
-			return current_value + max_score;
+		//	int current_value = grid.GenerateGridHeristiqueValue(min_player);
+			return  max_score;
 		}
 		if(player == min_player){
 			int min_score = 100000000;
@@ -69,14 +69,14 @@ public class Game_Instance {
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
 				
-				int score = MinMax(game_grid,max_player,dept + 1);
+				int score = MinMax(game_grid,max_player,dept+ 1);
 				if(score < min_score){ 
 					min_score = score;
 					}
 				game_grid.Undo_Move(current);
 			}
-			int current_value = grid.GenerateGridHeristiqueValue(max_player);
-			return current_value - min_score;
+			//int current_value = grid.GenerateGridHeristiqueValue(max_player);
+			return  min_score;
 		}
 		
 		return 0;
