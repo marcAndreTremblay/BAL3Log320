@@ -9,6 +9,9 @@ public class Game_Move {
 	int owner_player;
 	boolean is_atk;
 	
+	public Game_Move(){
+		
+	}
 	private String  ParseIntToString(int index){
 		String text = new String();
 		

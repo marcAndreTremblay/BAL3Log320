@@ -40,8 +40,9 @@ public class Game_Instance {
 	}
 	
 	
-	private int MinMax(Game_Grid grid, int player , int max_depth){
-		if(max_depth == 0){
+	private int MinMax(Game_Grid grid, int player , int dept ){
+		if(grid.IsFinal() == true 
+				|| dept == 2){
 			return grid.GenerateGridHeristiqueValue(player);
 		}
 		if(player == max_player){
@@ -49,30 +50,51 @@ public class Game_Instance {
 			List<Game_Move> move_list= game_grid.GetAvailableMove(player);
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
-				int score = MinMax(game_grid,min_player,max_depth);
+				int score = MinMax(game_grid,min_player,dept + 1);
+				if(score > max_score){ 
+					max_score = score;
+					}
 				game_grid.Undo_Move(current);
+				
 			}
+			int current_value = grid.GenerateGridHeristiqueValue(player);
+			return current_value + max_score;
 		}
 		if(player == min_player){
 			int min_score = 100000000;
 			List<Game_Move> move_list= game_grid.GetAvailableMove(player);
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
-				int score = MinMax(game_grid,max_player,max_depth-1);
+				
+				int score = MinMax(game_grid,max_player,dept + 1);
+				if(score < min_score){ 
+					min_score = score;
+					}
 				game_grid.Undo_Move(current);
+				
+				
+				
 			}
+			int current_value = grid.GenerateGridHeristiqueValue(player);
+			return current_value - min_score;
 		}
 		
 		return 0;
 	}
 	private Game_Move CalculateNextMove(){
+		Game_Move best_move = new Game_Move();
+		int Best_score = -1000000000;
 		List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
-		
-		//Note : Apply each move to the grid 
-		//the do alpa beta
-
-		Game_Move selected_move = move_list.get(0);
-		return selected_move;
+		for(Game_Move current : move_list){
+			game_grid.Apply_Move(current);
+			int score = MinMax(game_grid,min_player,0);
+			if(score > Best_score){
+				best_move = current;
+				Best_score = score;
+			}
+			game_grid.Undo_Move(current);
+		}
+		return best_move;
 	}
 	private void OnCommandReceive(char cmd){
 		try {
@@ -104,7 +126,7 @@ public class Game_Instance {
 					input.read(aBuffer,0,size);
 	                
 
-					System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des blancs\n");
+					System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des Noir\n");
 					max_player = 2;
 					min_player = 4;
 					

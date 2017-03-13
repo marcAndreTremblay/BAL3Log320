@@ -17,10 +17,46 @@ public class Game_Grid {
 	}
 	
 	public int GenerateGridHeristiqueValue(int player_value){
-		
-		return 0;
-	}
+		int value = 0;
+		//Check le nombre de pion
+		value += CountPion(player_value)*50;	
+		if(player_value ==4){
+			//Check la difference de pion
+			value += (CountPion(4) -  CountPion(2))*100;
+			//Check middle control
+			value += CountMidControlValue(player_value);
+			
+		}
+		if(player_value ==2){
+			//Check la difference de pion
+			value += (CountPion(2) -  CountPion(4))*100;
+			//Check middle control
+			value += CountMidControlValue(player_value);
 	
+		}	
+		return value;
+	}
+	private int CountMidControlValue(int player_value){
+		int mid_c_value= 0 ;
+		for(int i = 0;i<64;i++){
+			if(i % 3  == 0 || i % 4  == 0 || i % 5  == 0 ||i % 6  == 0 ){
+				if(board_data[i] == player_value){
+					mid_c_value += 20;
+				}
+			}
+		}
+		
+		return mid_c_value;
+	}
+	private int CountPion(int Player){
+		int count = 0;
+		for(int i = 0;i<64;i++){
+			if(board_data[i] == Player){
+				count++;
+			}
+		}
+		return count;
+	}
 	public List<Game_Move> GetAvailableMove(int player){
 		List<Game_Move> result = new LinkedList<Game_Move>();		
 		for(int i = 0; i< 64 ; i++)
@@ -108,7 +144,7 @@ public class Game_Grid {
 		this.board_data[move.From]  =0;
 	}
 	public void Undo_Move(Game_Move move){
-		this.board_data[move.From]  =this.board_data[move.To];
+		this.board_data[move.From]  = move.owner_player;
 		if(move.is_atk == true){
 			if(move.owner_player == 4){
 				this.board_data[move.To] = 2;
@@ -119,6 +155,21 @@ public class Game_Grid {
 			
 		}		
 	}
+	public boolean IsFinal(){
+		boolean won_check = false;
+		for(int i  = 0; i<8;i++){
+			if(board_data[i] == 4){
+				won_check = true;
+			}
+		}
+		for(int i  = 63; i> 55;i--){
+			if(board_data[i] == 2){
+				won_check = true;
+			}
+		}
+		
+		return won_check;
+	}
 	public void Build_Grid(byte[] aBuffer){
 		String s = new String(aBuffer).trim();
         String[] boardValues;
@@ -126,6 +177,16 @@ public class Game_Grid {
 
 		for(int i = 0;i< 64 ;i++){
 			board_data[i] = Integer.parseInt(boardValues[i]);
+		}
+	}
+	public void Build_Grid(){
+		for(int i = 0 ;i<64;i++){
+			if(i >= 0 && i < 16){
+				board_data[i] = 2;
+			}
+			if(i >= 48 && i < 64){
+				board_data[i] = 4;
+			}
 		}
 	}
 	public void PrintCmd(){
@@ -152,6 +213,14 @@ public class Game_Grid {
 		}
 		*/
 		System.out.print('\n');
+		
+		try {
+			
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
