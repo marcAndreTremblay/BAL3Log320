@@ -6,7 +6,8 @@ public class Game_Move {
 	int From;
 	int To;
 	private boolean form;
-	
+	int owner_player;
+	boolean is_atk;
 	
 	private String  ParseIntToString(int index){
 		String text = new String();
@@ -120,10 +121,12 @@ public class Game_Move {
 		
 		return row*8 + col;
 	}
-	public Game_Move(int from, int to , boolean atk){
+	public Game_Move(int owner,int from, int to , boolean atk){
 		this.From = from;
 		this.To= to;	
 		form = true;
+		is_atk = atk;
+		owner_player = owner;	
 	}
 	public Game_Move(String [] move_info){
 		S_From  =move_info[0];

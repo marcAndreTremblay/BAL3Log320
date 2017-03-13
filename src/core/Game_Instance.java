@@ -8,8 +8,8 @@ import java.util.List;
 public class Game_Instance {
 
 	Game_Grid game_grid;
-	int current_color = 0; //Note(Marc): 0 -> Unknown, 4 -> White, 2 -> Black
-	
+	int max_player= 0; //Note(Marc): 0 -> Unknown, 4 -> White, 2 -> Black
+	int min_player = 0;
 	Socket MyClient; //Todo(Marc) : Rename client_socket
 	BufferedInputStream input;  //Todo(Marc) : Rename socket_input
 	BufferedOutputStream output;//Todo(Marc) : Rename socket_output
@@ -38,8 +38,35 @@ public class Game_Instance {
 			cpt++;
 		}
 	}
+	
+	
+	private int MinMax(Game_Grid grid, int player , int max_depth){
+		if(max_depth == 0){
+			return grid.GenerateGridHeristiqueValue(player);
+		}
+		if(player == max_player){
+			int max_score = -100000000;
+			List<Game_Move> move_list= game_grid.GetAvailableMove(player);
+			for(Game_Move current : move_list){
+				game_grid.Apply_Move(current);
+				int score = MinMax(game_grid,min_player,max_depth);
+				game_grid.Undo_Move(current);
+			}
+		}
+		if(player == min_player){
+			int min_score = 100000000;
+			List<Game_Move> move_list= game_grid.GetAvailableMove(player);
+			for(Game_Move current : move_list){
+				game_grid.Apply_Move(current);
+				int score = MinMax(game_grid,max_player,max_depth-1);
+				game_grid.Undo_Move(current);
+			}
+		}
+		
+		return 0;
+	}
 	private Game_Move CalculateNextMove(){
-		List<Game_Move> move_list= game_grid.GetAvailableMove(this.current_color);
+		List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
 		
 		//Note : Apply each move to the grid 
 		//the do alpa beta
@@ -56,7 +83,8 @@ public class Game_Instance {
 					  input.read(aBuffer,0,size);
 		               					
 		                System.out.println("Nouvelle partie! Vous jouer blanc, entrez votre premier coup : \n");
-		                current_color = 4;
+		                max_player = 4;
+		                min_player = 2;
 		                game_grid.Build_Grid(aBuffer);
 		                game_grid.PrintCmd();
 		                
@@ -77,8 +105,8 @@ public class Game_Instance {
 	                
 
 					System.out.println("Nouvelle partie! Vous jouer noir, attendez le coup des blancs\n");
-					current_color = 2;
-					
+					max_player = 2;
+					min_player = 4;
 					
 					
 					game_grid.Build_Grid(aBuffer);
