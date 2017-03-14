@@ -18,9 +18,17 @@ public class Game_Instance {
 	BufferedReader console;
    
 	FastTimer timer;
+	
+	public Game_Instance(Game_Grid offline_grid , int max_player, int min_player){
+		this.game_grid = offline_grid;
+		this.max_player = max_player;
+		this.min_player = min_player;
+		this.timer = new FastTimer();
+	}
+	
 	public Game_Instance(){
 		try {
-			timer = new FastTimer();
+			this.timer = new FastTimer();
 			this.game_grid = new Game_Grid();
 			this.MyClient = new Socket("localhost", 8888);
 			this.input    = new BufferedInputStream(MyClient.getInputStream());
