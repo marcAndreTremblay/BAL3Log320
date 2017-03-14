@@ -29,14 +29,14 @@ public class Game_Grid {
 		//value += CountPion(player_value)*10;	
 		if(player_value == 4){
 			//Check la difference de pion
-			value += (CountPion(4) -  CountPion(2))*200;
+			value += (CountPion(4) -  CountPion(2))*500;
 			//Check middle control
 			value += CountMidControlValue(player_value);
 	
 		}
 		if(player_value ==2){
 			//Check la difference de pion
-			value += (CountPion(2) -  CountPion(4))*200;
+			value += (CountPion(2) -  CountPion(4))*500;
 			//Check middle control
 			value += CountMidControlValue(player_value);
 	

@@ -45,7 +45,7 @@ public class Game_Instance {
 	
 	private int MinMax(Game_Grid grid, int player , int dept ){
 		if(grid.IsFinal(player) == true 
-				|| dept == 1){
+				|| dept == 2){
 			return grid.GenerateGridHeristiqueValue(player);
 		}
 		if(player == max_player){
@@ -97,6 +97,7 @@ public class Game_Instance {
 			game_grid.Undo_Move(current);
 		}
 		timer.StopTimeAndPrint();
+		best_move.Print();
 		System.out.println("score : "+Best_score);
 		return best_move;
 	}
