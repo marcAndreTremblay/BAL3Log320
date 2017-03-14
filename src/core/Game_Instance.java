@@ -53,37 +53,49 @@ public class Game_Instance {
 	
 	private int MinMax(Game_Grid grid, int player , int dept ){
 		if(grid.IsFinal(player) == true 
-				|| dept == 2){
-			return grid.GenerateGridHeristiqueValue(player);
+				|| dept == 1){
+			return grid.GenerateGridHeristiqueValue(max_player) - grid.GenerateGridHeristiqueValue(min_player);
 		}
 		if(player == max_player){
-			int max_score = -100000000;
+			int max_score = -99999988;
 			List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
+			dept = dept+ 1;
 			for(Game_Move current : move_list){
+				
 				game_grid.Apply_Move(current);
 				int score = MinMax(game_grid,min_player,dept);
+			//	System.out.println("Max : " + dept);
+			//	current.Print();
+			//	System.out.println("Score : "+ score);
+				
 				if(score > max_score){ 
 					max_score = score;
 					}
 				game_grid.Undo_Move(current);
 				
 			}
-		//	int current_value = grid.GenerateGridHeristiqueValue(min_player);
+		//	System.out.println("	Selected score  : " +max_score );
+	
 			return  max_score;
 		}
 		if(player == min_player){
-			int min_score = 100000000;
+			int min_score = 99999988;
 			List<Game_Move> move_list= game_grid.GetAvailableMove(min_player);
+			
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
 				
-				int score = MinMax(game_grid,max_player,dept+ 1);
+				int score = MinMax(game_grid,max_player,dept);
+			//	System.out.print("Min : " + dept);
+			//	current.Print();
+			//	System.out.println("Score : "+ score);
 				if(score < min_score){ 
 					min_score = score;
 					}
 				game_grid.Undo_Move(current);
 			}
-			//int current_value = grid.GenerateGridHeristiqueValue(max_player);
+		//	System.out.println("	Selected score  : " +min_score );
+			
 			return  min_score;
 		}
 		
@@ -98,6 +110,8 @@ public class Game_Instance {
 		for(Game_Move current : move_list){
 			game_grid.Apply_Move(current);
 			int score = MinMax(game_grid,min_player,0);
+			current.Print();
+			System.out.println("Score : "+ score);
 			if(score > Best_score){
 				best_move = current;
 				Best_score = score;

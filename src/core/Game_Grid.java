@@ -22,11 +22,11 @@ public class Game_Grid {
 	public int GenerateGridHeristiqueValue(int player_value){
 		int value = 0;
 		if(this.IsFinal(player_value)){
-			return 999999999;
+			return 99999999;
 		}
 		
 		//Check le nombre de pion
-		//value += CountPion(player_value)*10;	
+		value += CountPion(player_value)*10;	
 		if(player_value == 4){
 			//Check la difference de pion
 			value += (CountPion(4) -  CountPion(2))*500;
@@ -47,12 +47,12 @@ public class Game_Grid {
 		int mid_c_value= 0 ;
 		for(int i = 0;i<64;i=i+stride){
 			if(board_data[i] == player_value){
-				mid_c_value -= 20;
+				mid_c_value += 20;
 			}
 	}
 		for(int i = 8;i<64;i=i+stride){
 			if(board_data[i] == player_value){
-				mid_c_value -= 20;
+				mid_c_value += 20;
 			}
 	}
 		for(int i = 5;i<64;i=i+stride){
@@ -138,14 +138,14 @@ public class Game_Grid {
 						}
 					}
 					//Check top left move
-					if(top_l >= min && top_l >= 0){
+					if(top_l >= min  && top_l <= max && top_l >= 0){
 						if(this.board_data[top_l] == 0 || this.board_data[top_l] == 2){
 							result.add(new Game_Move(player,i,top_l));
 						
 						}
 					}
 					//Check bottom right move
-					if(top_r >= min && top_r >= 0){
+					if(top_r >= min && top_r <= max && top_r >= 0){
 						if(this.board_data[top_r] == 0 || this.board_data[top_r] == 2){
 							result.add(new Game_Move(player,i,top_r));
 			
