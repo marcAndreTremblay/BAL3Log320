@@ -54,7 +54,7 @@ public class Game_Instance {
 	private int MinMax(Game_Grid grid, int player , int dept ){
 		if(grid.IsFinal(player) == true 
 				|| dept == 1){
-			return grid.GenerateGridHeristiqueValue(max_player) - grid.GenerateGridHeristiqueValue(min_player);
+			return grid.GenerateGridHeristiqueValue(max_player);
 		}
 		if(player == max_player){
 			int max_score = -99999988;
@@ -123,7 +123,22 @@ public class Game_Instance {
 		System.out.println("score : "+Best_score);
 		return best_move;
 	}
-	private void OnCommandReceive(char cmd){
+	
+
+		public Game_Move alpha_beta_MiniMax(){
+			Game_Move best_move = new Game_Move();
+			//Start with a min
+			List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
+			 	
+			return best_move;
+		}
+		public void alpha_beta_min(Game_Grid grid,int alpha, int beta){
+			
+		}
+		public void alpha_beta_max(Game_Grid grid,int alpha, int beta){ 	
+			
+		}
+		private void OnCommandReceive(char cmd){
 		try {
 			switch(cmd){
 				case '1':{	//Note(Marc): Starting game with white 
