@@ -9,6 +9,10 @@ public class Game_Move {
 	int owner_player;
 	boolean is_atk;
 	
+	int MoveValue = 0;
+	public void SetMoveValue(int value){
+		MoveValue =value;	
+	}
 	public Game_Move(){
 		
 	}

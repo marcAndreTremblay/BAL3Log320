@@ -126,17 +126,54 @@ public class Game_Instance {
 	
 
 		public Game_Move alpha_beta_MiniMax(){
-			Game_Move best_move = new Game_Move();
-			//Start with a min
-			List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
-			 	
+			Game_Move best_move = alpha_beta_max(this.game_grid, -99999999, 99999999,1,null);			 	
 			return best_move;
 		}
-		public void alpha_beta_min(Game_Grid grid,int alpha, int beta){
+		public Game_Move alpha_beta_min(Game_Grid grid,int alpha, int beta,int dept,Game_Move move){
+			if((grid.IsFinal(min_player) == true || dept == 0) &&  move != null){
+				move.SetMoveValue(-grid.GenerateGridHeristiqueValue(min_player));
+				return move;
+			}
+			dept--;
+			List<Game_Move> move_list= game_grid.GetAvailableMove(min_player);
+			Game_Move new_b_move = null;
+			int min_score = 99999999;
+			for(Game_Move current : move_list){
+				game_grid.Apply_Move(current);
+				Game_Move move_result  = alpha_beta_max(game_grid,alpha,beta,dept,current);		
+				game_grid.Undo_Move(current);
+				min_score = Math.min(move_result.MoveValue, min_score);
+				if(min_score < alpha){
+					return current;
+				}
+				beta = Math.min(beta, min_score);
+					new_b_move = current;
+				
+			}
 			
+			return new_b_move;
 		}
-		public void alpha_beta_max(Game_Grid grid,int alpha, int beta){ 	
-			
+		public Game_Move alpha_beta_max(Game_Grid grid,int alpha, int beta,int dept,Game_Move move){ 				
+			if((grid.IsFinal(max_player) == true || dept == 0 ) &&  move != null){
+				move.SetMoveValue(grid.GenerateGridHeristiqueValue(max_player));
+				return move;
+			}
+			List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
+			Game_Move new_b_move = null;
+			int max_score = -99999999;
+			for(Game_Move current : move_list){
+				game_grid.Apply_Move(current);
+				Game_Move move_result = alpha_beta_min(game_grid,alpha,beta,dept,current);
+				game_grid.Undo_Move(current);
+				max_score = Math.max(move_result.MoveValue, max_score);
+				if ( max_score  > beta){
+					return current;
+				}
+				alpha = Math.max(alpha, max_score);
+				new_b_move = current;
+				
+			}
+			return new_b_move;
 		}
 		private void OnCommandReceive(char cmd){
 		try {
@@ -152,8 +189,8 @@ public class Game_Instance {
 		                game_grid.Build_Grid(aBuffer);
 		                game_grid.PrintCmd();
 		                
-		                Game_Move selected_move =this.CalculateNextMove();
-						
+		                Game_Move selected_move =this.alpha_beta_MiniMax();
+		                selected_move.Print();
 						this.game_grid.Apply_Move(selected_move);
 						this.game_grid.PrintCmd();
 						
@@ -191,7 +228,8 @@ public class Game_Instance {
 					this.game_grid.Apply_Move(last_move);
 					this.game_grid.PrintCmd();
 					
-					Game_Move selected_move =this.CalculateNextMove();
+					Game_Move selected_move =this.alpha_beta_MiniMax();
+					selected_move.Print();
 					//Todo(Check best move); availalle
 									
 						this.game_grid.Apply_Move(selected_move);

@@ -29,35 +29,35 @@ public class Game_Grid {
 		value += CountPion(player_value)*10;	
 		if(player_value == 4){
 			//Check la difference de pion
-			value += (CountPion(4) -  CountPion(2))*500;
+			//value += (CountPion(4) -  CountPion(2))*500;
 			//Check middle control
 			value += CountMidControlValue(player_value);
 	
 		}
 		if(player_value ==2){
 			//Check la difference de pion
-			value += (CountPion(2) -  CountPion(4))*500;
+			//value += (CountPion(2) -  CountPion(4))*500;
 			//Check middle control
 			value += CountMidControlValue(player_value);
 	
 		}	
 		return value;
 	}
+	public int CountPawnAtkValue(int player , int grid_index){
+		board_data[grid_index] = 0; 
+		//To do maybe we should keep the data in the atk poss grid and only querry the index for the number of atker
+		return 0;
+	}
 	private int CountMidControlValue(int player_value){
 		int mid_c_value= 0 ;
-		for(int i = 0;i<64;i=i+stride){
-			if(board_data[i] == player_value){
-				mid_c_value += 20;
-			}
-	}
-		for(int i = 8;i<64;i=i+stride){
+		for(int i = 6;i<64;i=i+stride){
 			if(board_data[i] == player_value){
 				mid_c_value += 20;
 			}
 	}
 		for(int i = 5;i<64;i=i+stride){
 				if(board_data[i] == player_value){
-					mid_c_value += 20;
+					mid_c_value += 40;
 				}
 		}
 		for(int i = 4;i<64;i=i+stride){
@@ -66,11 +66,6 @@ public class Game_Grid {
 			}
 		}
 		for(int i = 3;i<64;i=i+stride){
-			if(board_data[i] == player_value){
-				mid_c_value += 40;
-			}
-		}
-		for(int i = 2;i<64;i=i+stride){
 			if(board_data[i] == player_value){
 				mid_c_value += 20;
 			}
@@ -159,6 +154,8 @@ public class Game_Grid {
 	public void Apply_Move(Game_Move move){
 		this.board_data[move.To]  =this.board_data[move.From];
 		this.board_data[move.From]  =0;
+		
+		
 	}
 	public void Undo_Move(Game_Move move){
 		this.board_data[move.From]  = move.owner_player;
