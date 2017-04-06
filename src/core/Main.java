@@ -19,28 +19,20 @@ public class Main {
 		if(Offline == true){
 
 			int [] data_2 = { 
-					2,0,0,0,0,0,0,2, // 2 start	
+					0,0,0,2,0,0,0,2, // 2 start	
 					0,0,0,0,0,0,0,0, 
-					2,0,0,0,0,0,0,2,
 					0,0,0,0,0,0,0,0,
-					2,0,0,0,0,0,0,2,
 					0,0,0,0,0,0,0,0,
-					2,0,0,0,0,0,0,2,
-					0,0,0,0,0,0,0,0};// 4 start	
-			Game_Grid test_grid_2 = new Game_Grid(data_2);
-			List<Game_Move> test_move_availaible = test_grid_2.GetAvailableMove(2);
+					0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,
+					0,0,4,0,0,0,0,0,
+					0,0,0,0,0,4,0,0};// 4 start	
+			Game_Grid test_grid_1 = new Game_Grid(data_2);
+			List<Game_Move> test_move_availaible = test_grid_1.GetAvailableMove(2);
 			PrintMoveList(test_move_availaible);
 			
-			int [] data_1 = { 
-					2,2,2,2,2,2,2,2, // 2 start	
-					2,2,2,2,2,2,2,2, 
-					0,0,0,0,0,0,0,0,
-					0,0,0,0,0,0,0,0,
-					0,0,0,0,0,0,0,0,
-					0,0,0,0,0,0,0,0,
-					4,4,4,4,4,4,4,4,
-					4,4,4,4,4,4,4,4};// 4 start	
-			Game_Grid test_grid_1 = new Game_Grid(data_1);
+
+			
 			Game_Instance offline_game = new Game_Instance(test_grid_1,2,4);	
 			
 

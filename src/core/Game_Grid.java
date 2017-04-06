@@ -26,21 +26,58 @@ public class Game_Grid {
 		}
 		
 		//Check le nombre de pion
-		value += CountPion(player_value)*10;	
+		value += CountPion(player_value)*100;	
 		if(player_value == 4){
-			//Check la difference de pion
-			//value += (CountPion(4) -  CountPion(2))*500;
-			//Check middle control
-			value += CountMidControlValue(player_value);
-	
+			int count = 0;
+			for(int i = 0;i<64;i++){
+				if(board_data[i] == player_value){					
+					//next row min and max
+					int min  = (i - i %stride)+this.stride;
+					int max = (min+stride-1);
+					int top_s = i - this.stride;
+					int top_l = i - this.stride - 1;
+					int top_r = i - this.stride + 1;
+					
+					int bottom_s = i + this.stride;
+					int bottom_l = i + this.stride - 1;
+					int bottom_r = i + this.stride + 1;
+					//Check bottom left move
+				
+						if((bottom_l >= min && bottom_l < 64 && this.board_data[bottom_l] == 4) || 
+								(bottom_r <= max && bottom_r < 64 && this.board_data[bottom_r] == 4)){
+							count++;			
+						}
+					
+					
+				}
+			}
+			value += count*70;
+			value += CountFilePowerValue(player_value);
 		}
-		if(player_value ==2){
-			//Check la difference de pion
-			//value += (CountPion(2) -  CountPion(4))*500;
-			//Check middle control
-			value += CountMidControlValue(player_value);
-	
+		if(player_value ==2){	
+			int count = 0;
+			for(int i = 0;i<64;i++){
+				if(board_data[i] == player_value){
+					int min  = (i - i %stride)-this.stride;
+					int max = (min+stride-1);
+					
+					int top_s = i - this.stride;
+					int top_l = i - this.stride - 1;
+					int top_r = i - this.stride + 1;
+					
+
+					//Check top left move
+					if((top_l >= min  && top_l <= max && top_l >= 0 && this.board_data[top_l] == 2) || 
+							top_r >= min && top_r <= max && top_r >= 0 && this.board_data[top_r] == 2){							
+							count++;
+						}
+					}
+				
+			}
+			value += count*70;
+			value += CountFilePowerValue(player_value);
 		}	
+		
 		return value;
 	}
 	public int CountPawnAtkValue(int player , int grid_index){
@@ -48,26 +85,26 @@ public class Game_Grid {
 		//To do maybe we should keep the data in the atk poss grid and only querry the index for the number of atker
 		return 0;
 	}
-	private int CountMidControlValue(int player_value){
+	private int CountFilePowerValue(int player_value){
 		int mid_c_value= 0 ;
-		for(int i = 6;i<64;i=i+stride){
+		for(int i = 1;i<64;i=i+stride){
 			if(board_data[i] == player_value){
-				mid_c_value += 20;
+				mid_c_value += 50;
 			}
-	}
-		for(int i = 5;i<64;i=i+stride){
-				if(board_data[i] == player_value){
-					mid_c_value += 40;
-				}
+		}		
+		for(int i = 3;i<64;i=i+stride){
+			if(board_data[i] == player_value){
+				mid_c_value += 10;
+			}
 		}
 		for(int i = 4;i<64;i=i+stride){
 			if(board_data[i] == player_value){
-				mid_c_value += 40;
+				mid_c_value += 10;
 			}
 		}
-		for(int i = 3;i<64;i=i+stride){
+		for(int i = 6;i<64;i=i+stride){
 			if(board_data[i] == player_value){
-				mid_c_value += 20;
+				mid_c_value += 50;
 			}
 		}
 		return mid_c_value;

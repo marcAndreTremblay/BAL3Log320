@@ -52,50 +52,43 @@ public class Game_Instance {
 	
 	
 	private int MinMax(Game_Grid grid, int player , int dept ){
-		if(grid.IsFinal(player) == true 
-				|| dept == 1){
-			return grid.GenerateGridHeristiqueValue(max_player);
+		if(grid.IsFinal(player) == true || dept == 1){
+			if(player == min_player){
+				return grid.GenerateGridHeristiqueValue(min_player) - grid.GenerateGridHeristiqueValue(max_player);
+			}
+			else{
+				return grid.GenerateGridHeristiqueValue(max_player) - grid.GenerateGridHeristiqueValue(min_player);	
+			}
 		}
 		if(player == max_player){
-			int max_score = -99999988;
+			int max_score = -99999999;
 			List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
-			dept = dept+ 1;
+			
 			for(Game_Move current : move_list){
 				
 				game_grid.Apply_Move(current);
 				int score = MinMax(game_grid,min_player,dept);
-			//	System.out.println("Max : " + dept);
-			//	current.Print();
-			//	System.out.println("Score : "+ score);
-				
 				if(score > max_score){ 
 					max_score = score;
 					}
 				game_grid.Undo_Move(current);
 				
 			}
-		//	System.out.println("	Selected score  : " +max_score );
-	
 			return  max_score;
 		}
 		if(player == min_player){
-			int min_score = 99999988;
+			int min_score = 99999999;
 			List<Game_Move> move_list= game_grid.GetAvailableMove(min_player);
-			
+			dept++;
 			for(Game_Move current : move_list){
 				game_grid.Apply_Move(current);
 				
 				int score = MinMax(game_grid,max_player,dept);
-			//	System.out.print("Min : " + dept);
-			//	current.Print();
-			//	System.out.println("Score : "+ score);
 				if(score < min_score){ 
 					min_score = score;
 					}
 				game_grid.Undo_Move(current);
 			}
-		//	System.out.println("	Selected score  : " +min_score );
-			
 			return  min_score;
 		}
 		
@@ -103,15 +96,14 @@ public class Game_Instance {
 	}
 	public Game_Move CalculateNextMove(){
 		Game_Move best_move = new Game_Move();
-		int Best_score = -1000000000;
+		int Best_score = -99999999;
 		List<Game_Move> move_list= game_grid.GetAvailableMove(max_player);
 		System.out.println(move_list.size());
 		timer.StartTime();
 		for(Game_Move current : move_list){
 			game_grid.Apply_Move(current);
 			int score = MinMax(game_grid,min_player,0);
-			current.Print();
-			System.out.println("Score : "+ score);
+			
 			if(score > Best_score){
 				best_move = current;
 				Best_score = score;
@@ -126,12 +118,12 @@ public class Game_Instance {
 	
 
 		public Game_Move alpha_beta_MiniMax(){
-			Game_Move best_move = alpha_beta_max(this.game_grid, -99999999, 99999999,1,null);			 	
+			Game_Move best_move = alpha_beta_max(this.game_grid, -1000000000, 1000000000,2,null);			 	
 			return best_move;
 		}
 		public Game_Move alpha_beta_min(Game_Grid grid,int alpha, int beta,int dept,Game_Move move){
 			if((grid.IsFinal(min_player) == true || dept == 0) &&  move != null){
-				move.SetMoveValue(-grid.GenerateGridHeristiqueValue(min_player));
+				move.SetMoveValue(grid.GenerateGridHeristiqueValue(min_player));
 				return move;
 			}
 			dept--;
@@ -147,7 +139,7 @@ public class Game_Instance {
 					return current;
 				}
 				beta = Math.min(beta, min_score);
-					new_b_move = current;
+				new_b_move = current;
 				
 			}
 			
@@ -188,8 +180,8 @@ public class Game_Instance {
 		                min_player = 2;
 		                game_grid.Build_Grid(aBuffer);
 		                game_grid.PrintCmd();
-		                
-		                Game_Move selected_move =this.alpha_beta_MiniMax();
+		               Game_Move selected_move =this.CalculateNextMove(); 
+		             // Game_Move selected_move =this.alpha_beta_MiniMax();
 		                selected_move.Print();
 						this.game_grid.Apply_Move(selected_move);
 						this.game_grid.PrintCmd();
@@ -228,7 +220,8 @@ public class Game_Instance {
 					this.game_grid.Apply_Move(last_move);
 					this.game_grid.PrintCmd();
 					
-					Game_Move selected_move =this.alpha_beta_MiniMax();
+					 Game_Move selected_move =this.CalculateNextMove(); 
+		             //Game_Move selected_move =this.alpha_beta_MiniMax();
 					selected_move.Print();
 					//Todo(Check best move); availalle
 									
